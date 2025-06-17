@@ -12,8 +12,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.azabost.compote.ui.theme.CompoteTheme
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var greetingService: GreetingService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -21,7 +28,7 @@ class MainActivity : ComponentActivity() {
             CompoteTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Android",
+                        greeting = greetingService.getGreeting("Android"),
                         modifier = Modifier
                             .padding(innerPadding)
                     )
@@ -32,9 +39,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun Greeting(greeting: String, modifier: Modifier = Modifier) {
     Text(
-        text = "Hello $name!",
+        text = greeting,
         modifier = modifier
     )
 }
@@ -44,7 +51,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 fun GreetingPreview() {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Greeting(
-            name = "Android",
+            greeting = "Hello Android! (preview)",
             modifier = Modifier
                 .padding(innerPadding)
         )
