@@ -1,5 +1,6 @@
 package com.azabost.compote
 
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -8,11 +9,8 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object GreetingModule {
+interface GreetingModule {
 
-    @Provides
-    @Singleton
-    fun provideGreetingService(): GreetingService {
-        return DefaultGreetingService()
-    }
+    @Binds
+    fun provideGreetingService(defaultGreetingService: DefaultGreetingService): GreetingService
 }

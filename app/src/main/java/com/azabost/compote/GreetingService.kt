@@ -1,11 +1,15 @@
 package com.azabost.compote
 
+import javax.inject.Inject
+import javax.inject.Singleton
+
 interface GreetingService {
     fun getGreeting(name: String): String
 }
 
-class DefaultGreetingService : GreetingService {
+@Singleton
+class DefaultGreetingService @Inject constructor() : GreetingService {
     override fun getGreeting(name: String): String {
-        return "Hello, $name! (from injected service)"
+        return "[$this] Hello, $name!"
     }
 }

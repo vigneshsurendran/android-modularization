@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -14,12 +15,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.azabost.compote.ui.theme.CompoteTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import javax.inject.Provider
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     @Inject
-    lateinit var greetingService: GreetingService
+    lateinit var greetingServiceProvider: Provider<GreetingService>
+
+    @Inject
+    lateinit var defaultGreetingServiceProvider: Provider<DefaultGreetingService>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,11 +32,20 @@ class MainActivity : ComponentActivity() {
         setContent {
             CompoteTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        greeting = greetingService.getGreeting("Android"),
-                        modifier = Modifier
-                            .padding(innerPadding)
-                    )
+                    Column(modifier = Modifier.padding(innerPadding)) {
+                        Greeting(
+                            greeting = greetingServiceProvider.get().getGreeting("interface 1"),
+                        )
+                        Greeting(
+                            greeting = greetingServiceProvider.get().getGreeting("interface 2"),
+                        )
+                        Greeting(
+                            greeting = defaultGreetingServiceProvider.get().getGreeting("implementation 1"),
+                        )
+                        Greeting(
+                            greeting = defaultGreetingServiceProvider.get().getGreeting("implementation 2"),
+                        )
+                    }
                 }
             }
         }
@@ -51,7 +65,7 @@ fun Greeting(greeting: String, modifier: Modifier = Modifier) {
 fun GreetingPreview() {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Greeting(
-            greeting = "Hello Android! (preview)",
+            greeting = "Preview!",
             modifier = Modifier
                 .padding(innerPadding)
         )
