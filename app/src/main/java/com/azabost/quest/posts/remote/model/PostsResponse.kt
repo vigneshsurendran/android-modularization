@@ -2,10 +2,10 @@ package com.azabost.quest.posts.remote.model
 
 import kotlinx.serialization.Serializable
 
-typealias PostsResponse = List<PostResponseItem>
+typealias PostsResponse = List<PostsResponseItem>
 
 @Serializable
-data class PostResponseItem(
+data class PostsResponseItem(
     val id: Int,
     val userId: Int,
     val title: String,

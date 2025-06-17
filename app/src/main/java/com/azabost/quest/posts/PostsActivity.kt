@@ -16,9 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import com.azabost.quest.posts.model.Post
-import com.azabost.quest.posts.remote.PostsService
-import com.azabost.quest.posts.remote.model.PostResponseItem
-import com.azabost.quest.posts.remote.model.PostsResponse
+import com.azabost.quest.posts.model.PostsRepository
 import com.azabost.quest.ui.theme.QuestTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,15 +27,15 @@ import javax.inject.Inject
 class PostsActivity : ComponentActivity() {
 
     @Inject
-    lateinit var postsService: PostsService
+    lateinit var postsRepository: PostsRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val posts = MutableStateFlow<PostsResponse?>(null)
+        val posts = MutableStateFlow<List<Post>>(emptyList())
 
-        lifecycleScope.launch { posts.value = postsService.getPosts() }
+        lifecycleScope.launch { posts.value = postsRepository.getPosts() }
 
         setContent {
             QuestTheme {
@@ -57,9 +55,9 @@ class PostsActivity : ComponentActivity() {
 }
 
 @Composable
-fun Post(post: PostResponseItem, modifier: Modifier = Modifier) {
+fun Post(post: Post, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
-        Text(text = post.userId.toString())
+        Text(text = post.userName)
         Text(text = post.id.toString())
         Text(text = post.title)
         Text(text = post.body)
@@ -71,7 +69,7 @@ fun Post(post: PostResponseItem, modifier: Modifier = Modifier) {
 fun PostsPreview() {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Post(
-            post = PostResponseItem(1, 1, "title", "body"),
+            post = Post(1, "User", "Title", "Body"),
             modifier = Modifier
                 .padding(innerPadding)
         )

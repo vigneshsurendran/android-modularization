@@ -13,6 +13,9 @@ object SerializationModule {
 
     @Provides
     @Singleton
-    fun json(): Json = Json.Default
+    fun json(): Json =
+        Json(from = Json.Default) {
+            ignoreUnknownKeys = true
+        }
 
 }

@@ -1,6 +1,9 @@
 package com.azabost.quest.posts.di
 
+import com.azabost.quest.posts.model.PostsRepository
 import com.azabost.quest.posts.remote.PostsService
+import com.azabost.quest.posts.remote.RemotePostsRepository
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,25 +18,20 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object PostsModule {
+interface PostsModule {
 
-    @Provides
-    @Singleton
-    fun postsService(okHttpClient: OkHttpClient, converterFactory: Converter.Factory): PostsService =
-        Retrofit.Builder()
-            .client(okHttpClient)
-            .baseUrl("https://jsonplaceholder.typicode.com/")
-            .addConverterFactory(converterFactory)
-            .build()
-            .create(PostsService::class.java)
+    @Binds
+    fun postsRepository(repository: RemotePostsRepository): PostsRepository
 
-    @Provides
-    @Singleton
-    fun converterFactory(json: Json) = json.asConverterFactory("application/json".toMediaType())
-
-    @Provides
-    @Singleton
-    fun okHttpClient(): OkHttpClient = OkHttpClient()
-
-
+    companion object {
+        @Provides
+        @Singleton
+        fun postsService(okHttpClient: OkHttpClient, converterFactory: Converter.Factory): PostsService =
+            Retrofit.Builder()
+                .client(okHttpClient)
+                .baseUrl("https://jsonplaceholder.typicode.com/")
+                .addConverterFactory(converterFactory)
+                .build()
+                .create(PostsService::class.java)
+    }
 }
