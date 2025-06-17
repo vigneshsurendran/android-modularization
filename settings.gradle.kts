@@ -19,5 +19,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "compote"
+rootProject.name = "Quest1"
 include(":app")
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

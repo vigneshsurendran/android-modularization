@@ -1,7 +1,7 @@
-package com.azabost.compote
+package com.azabost.quest
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class CompoteApplication : Application()
+class QuestApplication : Application()

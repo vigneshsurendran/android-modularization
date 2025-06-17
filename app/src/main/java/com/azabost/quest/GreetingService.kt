@@ -1,4 +1,4 @@
-package com.azabost.compote
+package com.azabost.quest
 
 import javax.inject.Inject
 import javax.inject.Singleton

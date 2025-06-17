@@ -9,11 +9,11 @@ plugins {
 }
 
 android {
-    namespace = "com.azabost.compote"
+    namespace = "com.azabost.quest"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.azabost.compote"
+        applicationId = "com.azabost.quest1"
         minSdk = 28
         targetSdk = 35
         versionCode = 1
