@@ -1,9 +1,10 @@
-package com.azabost.quest.posts
+package com.azabost.quest.posts.ui.list
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,35 +15,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.lifecycleScope
 import com.azabost.quest.posts.model.Post
-import com.azabost.quest.posts.model.PostsRepository
 import com.azabost.quest.ui.theme.QuestTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class PostsActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var postsRepository: PostsRepository
+    private val viewModel: PostsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val posts = MutableStateFlow<List<Post>>(emptyList())
-
-        lifecycleScope.launch { posts.value = postsRepository.getPosts() }
+        viewModel.getPosts()
 
         setContent {
             QuestTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val posts = posts.collectAsState()
+                    val posts = viewModel.posts.collectAsState()
                     LazyColumn(modifier = Modifier.padding(innerPadding)) {
-                        posts.value?.forEach { post ->
+                        posts.value.forEach { post ->
                             item {
                                 Post(post = post)
                             }
