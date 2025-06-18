@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.azabost.quest.posts.model.Post
 import com.azabost.quest.ui.theme.QuestTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,7 +36,11 @@ class PostDetailsActivity : ComponentActivity() {
 
         setContent {
             QuestTheme {
-                PostDetailsScreen(viewModel = viewModel)
+                val uiState = viewModel.uiState.collectAsState()
+                PostDetailsScreen(
+                    uiState = uiState.value,
+                    onRetry = viewModel::fetchPost
+                )
             }
         }
     }
@@ -44,10 +49,9 @@ class PostDetailsActivity : ComponentActivity() {
 @Composable
 fun PostDetailsScreen(
     modifier: Modifier = Modifier,
-    viewModel: PostDetailsViewModel
+    uiState: PostDetailsViewModel.UiState,
+    onRetry: () -> Unit = {}
 ) {
-    val uiState = viewModel.uiState.collectAsState().value
-
     Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
         Box(
             modifier = Modifier
@@ -59,10 +63,12 @@ fun PostDetailsScreen(
                 is PostDetailsViewModel.UiState.Loading -> {
                     Text("Loading...")
                 }
+
                 is PostDetailsViewModel.UiState.PostDetails -> {
                     val post = uiState.post
                     Text("Post #${post.id}: ${post.title}\n\n${post.body}")
                 }
+
                 is PostDetailsViewModel.UiState.Error -> {
                     androidx.compose.foundation.layout.Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -70,7 +76,7 @@ fun PostDetailsScreen(
                     ) {
                         Text("Failed to load post #${uiState.postId}")
                         androidx.compose.material3.Button(
-                            onClick = { viewModel.fetchPost() }
+                            onClick = onRetry
                         ) {
                             Text("Retry")
                         }
@@ -78,5 +84,43 @@ fun PostDetailsScreen(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun PostDetailsScreenLoadingPreview() {
+    QuestTheme {
+        PostDetailsScreen(
+            uiState = PostDetailsViewModel.UiState.Loading
+        )
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun PostDetailsScreenDetailsPreview() {
+    QuestTheme {
+        PostDetailsScreen(
+            uiState = PostDetailsViewModel.UiState.PostDetails(
+                post = Post(
+                    id = 1,
+                    userName = "John Doe",
+                    title = "Sample Post Title",
+                    body = "This is a sample post body with some content to display in the preview."
+                )
+            )
+        )
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun PostDetailsScreenErrorPreview() {
+    QuestTheme {
+        PostDetailsScreen(
+            uiState = PostDetailsViewModel.UiState.Error(postId = 42),
+            onRetry = {}
+        )
     }
 }

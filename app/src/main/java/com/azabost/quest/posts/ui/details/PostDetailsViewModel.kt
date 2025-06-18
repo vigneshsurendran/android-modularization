@@ -23,22 +23,24 @@ class PostDetailsViewModel @Inject constructor(
     val uiState: StateFlow<UiState> = _uiState
 
     sealed class UiState {
-        object Loading: UiState()
-        data class PostDetails(val post: Post): UiState()
-        data class Error(val postId: Int): UiState()
+        object Loading : UiState()
+        data class PostDetails(val post: Post) : UiState()
+        data class Error(val postId: Int) : UiState()
     }
 
-    fun fetchPost() = viewModelScope.launch {
-        try {
-            val post = postsRepository.getPost(postId)
-            if (post != null) {
-                showPostDetails(post)
-            } else {
+    fun fetchPost() {
+        viewModelScope.launch {
+            try {
+                val post = postsRepository.getPost(postId)
+                if (post != null) {
+                    showPostDetails(post)
+                } else {
+                    showError()
+                }
+            } catch (e: Exception) {
+                ensureActive()
                 showError()
             }
-        } catch (e: Exception) {
-            ensureActive()
-            showError()
         }
     }
 
