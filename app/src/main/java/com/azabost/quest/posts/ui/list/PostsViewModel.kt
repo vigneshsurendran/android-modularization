@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.azabost.quest.posts.model.Post
 import com.azabost.quest.posts.model.PostsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -14,10 +15,25 @@ import javax.inject.Inject
 class PostsViewModel @Inject constructor(
     private val repository: PostsRepository
 ) : ViewModel() {
-    private val _posts = MutableStateFlow<List<Post>>(emptyList())
-    val posts: StateFlow<List<Post>> = _posts
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState
 
-    fun getPosts() = viewModelScope.launch {
-        _posts.value = repository.getPosts()
+    sealed class UiState {
+        object Loading: UiState()
+        data class Success(val posts: List<Post>): UiState()
+        object Error: UiState()
+    }
+
+    fun getPosts() {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            try {
+                val posts = repository.getPosts()
+                _uiState.value = UiState.Success(posts)
+            } catch (e: Exception) {
+                ensureActive()
+                _uiState.value = UiState.Error
+            }
+        }
     }
 }

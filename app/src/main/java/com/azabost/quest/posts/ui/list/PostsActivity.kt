@@ -21,6 +21,10 @@ import com.azabost.quest.posts.model.Post
 import com.azabost.quest.posts.ui.details.PostDetailsActivity
 import com.azabost.quest.ui.theme.QuestTheme
 import dagger.hilt.android.AndroidEntryPoint
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.ui.Alignment
+import androidx.compose.material3.Button
 
 @AndroidEntryPoint
 class PostsActivity : ComponentActivity() {
@@ -35,10 +39,12 @@ class PostsActivity : ComponentActivity() {
 
         setContent {
             QuestTheme {
-                val posts = viewModel.posts.collectAsState()
+                val uiState = viewModel.uiState.collectAsState()
+
                 PostsScreen(
-                    posts = posts.value,
+                    uiState = uiState.value,
                     onPostClick = this::onPostClick,
+                    onErrorClick = viewModel::getPosts
                 )
             }
         }
@@ -54,18 +60,47 @@ class PostsActivity : ComponentActivity() {
 
 @Composable
 fun PostsScreen(
-    posts: List<Post>,
+    uiState: PostsViewModel.UiState,
     modifier: Modifier = Modifier,
-    onPostClick: (Int) -> Unit = {}
+    onPostClick: (Int) -> Unit = {},
+    onErrorClick: () -> Unit = {},
 ) {
     Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
-        LazyColumn(modifier = Modifier.padding(innerPadding)) {
-            posts.forEach { post ->
-                item {
-                    Post(
-                        post = post,
-                        onPostClick = onPostClick
-                    )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            contentAlignment = Alignment.Center
+        ) {
+            when (uiState) {
+                is PostsViewModel.UiState.Loading -> {
+                    Text("Loading...")
+                }
+                is PostsViewModel.UiState.Success -> {
+                    val posts = uiState.posts
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        posts.forEach { post ->
+                            item {
+                                Post(
+                                    post = post,
+                                    onPostClick = onPostClick
+                                )
+                            }
+                        }
+                    }
+                }
+                is PostsViewModel.UiState.Error -> {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text("Failed to load posts")
+                        Button(
+                            onClick = onErrorClick
+                        ) {
+                            Text("Retry")
+                        }
+                    }
                 }
             }
         }
@@ -88,15 +123,34 @@ fun Post(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showBackground = true, showSystemUi = true, name = "Success State")
 @Composable
-fun PostsPreview() {
+fun PostsSuccessPreview() {
     QuestTheme {
-        PostsScreen(
-            posts = listOf(
-                Post(1, "User 1", "Title 1", "Body 1"),
-                Post(2, "User 2", "Title 2", "Body 2")
-            )
+        val previewPosts = listOf(
+            Post(1, "User 1", "Title 1", "Body 1"),
+            Post(2, "User 2", "Title 2", "Body 2")
         )
+
+        // Create a preview that shows the Success state
+        PostsScreen(uiState = PostsViewModel.UiState.Success(previewPosts))
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true, name = "Loading State")
+@Composable
+fun PostsLoadingPreview() {
+    QuestTheme {
+        // Create a preview that shows the Loading state
+        PostsScreen(uiState = PostsViewModel.UiState.Loading)
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true, name = "Error State")
+@Composable
+fun PostsErrorPreview() {
+    QuestTheme {
+        // Create a preview that shows the Error state
+        PostsScreen(uiState = PostsViewModel.UiState.Error)
     }
 }
