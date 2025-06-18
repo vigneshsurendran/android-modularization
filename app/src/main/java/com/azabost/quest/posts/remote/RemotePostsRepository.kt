@@ -8,20 +8,29 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class RemotePostsRepository @Inject constructor(private val postsService: PostsService) : PostsRepository {
+class RemotePostsRepository @Inject constructor(private val postsService: PostsService, private val cache: RemotePostsCache) : PostsRepository {
 
     override suspend fun getPosts(): List<Post> = coroutineScope {
+        val cachedPosts = cache.get()
+        if (cachedPosts != null) {
+            return@coroutineScope cachedPosts
+        }
+
         val usersAsync = async { postsService.getUsers() }
         val postsAsync = async { postsService.getPosts() }
 
-        postsAsync.await().map { post ->
-            val user = usersAsync.await().first { it.id == post.userId }
-            Post(
-                id = post.id,
-                userName = user.name,
-                title = post.title,
-                body = post.body
-            )
-        }
+        postsAsync.await()
+            .map { post ->
+                val user = usersAsync.await().first { it.id == post.userId }
+                Post(
+                    id = post.id,
+                    userName = user.name,
+                    title = post.title,
+                    body = post.body
+                )
+            }.also { cache.store(it) }
     }
+
+    override suspend fun getPost(id: Int): Post? =
+        getPosts().find { it.id == id }
 }

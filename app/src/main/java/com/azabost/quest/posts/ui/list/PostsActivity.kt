@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import android.content.Intent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -16,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.azabost.quest.posts.model.Post
+import com.azabost.quest.posts.ui.details.PostDetailsActivity
 import com.azabost.quest.ui.theme.QuestTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,22 +36,36 @@ class PostsActivity : ComponentActivity() {
         setContent {
             QuestTheme {
                 val posts = viewModel.posts.collectAsState()
-                PostsScreen(posts = posts.value)
+                PostsScreen(
+                    posts = posts.value,
+                    onPostClick = this::onPostClick,
+                )
             }
         }
+    }
+
+    private fun onPostClick(postId: Int) {
+        val intent = Intent(this@PostsActivity, PostDetailsActivity::class.java).apply {
+            putExtra(PostDetailsActivity.EXTRA_POST_ID, postId)
+        }
+        startActivity(intent)
     }
 }
 
 @Composable
 fun PostsScreen(
     posts: List<Post>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onPostClick: (Int) -> Unit = {}
 ) {
     Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
         LazyColumn(modifier = Modifier.padding(innerPadding)) {
             posts.forEach { post ->
                 item {
-                    Post(post = post)
+                    Post(
+                        post = post,
+                        onPostClick = onPostClick
+                    )
                 }
             }
         }
@@ -56,8 +73,14 @@ fun PostsScreen(
 }
 
 @Composable
-fun Post(post: Post, modifier: Modifier = Modifier) {
-    Column(modifier = modifier) {
+fun Post(
+    post: Post,
+    modifier: Modifier = Modifier,
+    onPostClick: (Int) -> Unit = {}
+) {
+    Column(
+        modifier = modifier.clickable { onPostClick(post.id) }
+    ) {
         Text(text = post.userName)
         Text(text = post.id.toString())
         Text(text = post.title)
