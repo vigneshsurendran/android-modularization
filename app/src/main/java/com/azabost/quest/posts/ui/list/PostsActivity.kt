@@ -32,15 +32,23 @@ class PostsActivity : ComponentActivity() {
 
         setContent {
             QuestTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val posts = viewModel.posts.collectAsState()
-                    LazyColumn(modifier = Modifier.padding(innerPadding)) {
-                        posts.value.forEach { post ->
-                            item {
-                                Post(post = post)
-                            }
-                        }
-                    }
+                val posts = viewModel.posts.collectAsState()
+                PostsScreen(posts = posts.value)
+            }
+        }
+    }
+}
+
+@Composable
+fun PostsScreen(
+    posts: List<Post>,
+    modifier: Modifier = Modifier
+) {
+    Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
+        LazyColumn(modifier = Modifier.padding(innerPadding)) {
+            posts.forEach { post ->
+                item {
+                    Post(post = post)
                 }
             }
         }
@@ -60,11 +68,12 @@ fun Post(post: Post, modifier: Modifier = Modifier) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PostsPreview() {
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Post(
-            post = Post(1, "User", "Title", "Body"),
-            modifier = Modifier
-                .padding(innerPadding)
+    QuestTheme {
+        PostsScreen(
+            posts = listOf(
+                Post(1, "User 1", "Title 1", "Body 1"),
+                Post(2, "User 2", "Title 2", "Body 2")
+            )
         )
     }
 }
