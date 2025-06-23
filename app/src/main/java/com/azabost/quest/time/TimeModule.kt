@@ -1,18 +1,14 @@
 package com.azabost.quest.time
 
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object TimeModule {
+interface TimeModule {
 
-    @Provides
-    @Singleton
-    fun nowProvider(): NowProvider = object : NowProvider {
-        override fun now(): Long = System.currentTimeMillis()
-    }
+    @Binds
+    fun nowProvider(defaultNowProvider: DefaultNowProvider): NowProvider
 }

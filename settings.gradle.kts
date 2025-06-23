@@ -19,7 +19,8 @@ dependencyResolutionManagement {
     }
 }
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 rootProject.name = "Quest1"
 include(":app")
-
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+include(":time")

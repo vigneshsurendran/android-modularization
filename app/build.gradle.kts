@@ -1,3 +1,4 @@
+import com.azabost.quest.build.Config
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -33,8 +34,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = Config.javaVersion
+        targetCompatibility = Config.javaVersion
     }
     buildFeatures {
         compose = true
@@ -43,11 +44,13 @@ android {
 
 kotlin {
     compilerOptions {
-        jvmTarget = JvmTarget.JVM_11
+        jvmTarget = Config.kotlinJvmTarget
     }
 }
 
 dependencies {
+    implementation(projects.time)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
@@ -70,6 +73,7 @@ dependencies {
     implementation(libs.retrofit.converter.kotlinxSerialization)
 
     testImplementation(libs.junit)
+    testImplementation(testFixtures(projects.time))
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
