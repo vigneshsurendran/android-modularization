@@ -16,7 +16,7 @@ class RemotePostsCache @Inject constructor(val nowProvider: NowProvider) {
     }
 
     fun get(): List<Post>? {
-        val isCacheExpired = storedAt + CACHE_EXPIRATION < System.currentTimeMillis()
+        val isCacheExpired = storedAt + CACHE_EXPIRATION < nowProvider.now()
 
         return if (isCacheExpired) {
             clear()
