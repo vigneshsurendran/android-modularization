@@ -49,8 +49,6 @@ kotlin {
 }
 
 dependencies {
-    implementation(projects.time)
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
@@ -73,7 +71,6 @@ dependencies {
     implementation(libs.retrofit.converter.kotlinxSerialization)
 
     testImplementation(libs.junit)
-    testImplementation(testFixtures(projects.time))
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
