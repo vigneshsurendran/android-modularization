@@ -11,12 +11,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.azabost.quest.posts.model.Post
 import com.azabost.quest.posts.ui.details.PostDetailsActivity
 import com.azabost.quest.theme.QuestTheme
@@ -25,11 +27,20 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.Alignment
 import androidx.compose.material3.Button
+import androidx.compose.material3.DividerDefaults
+import androidx.compose.material3.HorizontalDivider
+import com.azabost.quest.analytics.Analytics
+import com.azabost.quest.analytics.AnalyticsEvent
+import com.azabost.quest.logging.Logger
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PostsActivity : ComponentActivity() {
 
     private val viewModel: PostsViewModel by viewModels()
+
+    @Inject
+    lateinit var analytics: Analytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +62,8 @@ class PostsActivity : ComponentActivity() {
     }
 
     private fun onPostClick(postId: Int) {
+        analytics.logEvent(AnalyticsEvent.POST_CLICKED, mapOf("postId" to postId))
+
         val intent = Intent(this@PostsActivity, PostDetailsActivity::class.java).apply {
             putExtra(PostDetailsActivity.EXTRA_POST_ID, postId)
         }
@@ -83,8 +96,10 @@ fun PostsScreen(
                             item {
                                 Post(
                                     post = post,
-                                    onPostClick = onPostClick
+                                    onPostClick = onPostClick,
+                                    modifier = Modifier.padding(16.dp)
                                 )
+                                HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
                             }
                         }
                     }

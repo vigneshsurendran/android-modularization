@@ -1,5 +1,4 @@
 import com.azabost.quest.build.Config
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
@@ -15,7 +14,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.azabost.quest1"
+        applicationId = "com.azabost.modularization"
         minSdk = 28
         targetSdk = 35
         versionCode = 1
@@ -39,6 +38,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -58,23 +58,24 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.kotlinx.coroutines.android)
 
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 
     // serialization
+    implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
 
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.kotlinxSerialization)
 
+    testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
+    testImplementation(libs.kotlinx.coroutines.test)
+
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

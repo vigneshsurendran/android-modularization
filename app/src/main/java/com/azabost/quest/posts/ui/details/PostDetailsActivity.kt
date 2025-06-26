@@ -8,16 +8,22 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.azabost.quest.analytics.Analytics
 import com.azabost.quest.posts.model.Post
 import com.azabost.quest.theme.QuestTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PostDetailsActivity : ComponentActivity() {
@@ -39,7 +45,8 @@ class PostDetailsActivity : ComponentActivity() {
                 val uiState = viewModel.uiState.collectAsState()
                 PostDetailsScreen(
                     uiState = uiState.value,
-                    onRetry = viewModel::fetchPost
+                    onRetry = viewModel::fetchPost,
+                    onShare = viewModel::sharePost,
                 )
             }
         }
@@ -50,9 +57,24 @@ class PostDetailsActivity : ComponentActivity() {
 fun PostDetailsScreen(
     modifier: Modifier = Modifier,
     uiState: PostDetailsViewModel.UiState,
-    onRetry: () -> Unit = {}
+    onRetry: () -> Unit = {},
+    onShare: (Post) -> Unit = {}
 ) {
-    Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        floatingActionButton = {
+            if (uiState is PostDetailsViewModel.UiState.PostDetails) {
+                FloatingActionButton(
+                    onClick = { onShare(uiState.post) }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = "Share"
+                    )
+                }
+            }
+        }
+    ) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()

@@ -4,11 +4,13 @@ import com.azabost.quest.posts.model.Post
 import com.azabost.quest.time.FakeNowProvider
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import kotlin.time.Duration.Companion.hours
 
 class RemotePostsCacheTest {
 
     private val nowProvider = FakeNowProvider()
-    private val cache = RemotePostsCache(nowProvider)
+    private val cacheExpiryTimeMillis: Long = 1.hours.inWholeMilliseconds
+    private val cache = RemotePostsCache(cacheExpiryTimeMillis, nowProvider)
 
     private val post = Post(1, "username", "title", "body")
 
@@ -23,8 +25,12 @@ class RemotePostsCacheTest {
     fun `test cache expired`() {
         val posts = listOf(post)
         cache.store(posts)
-        nowProvider.advanceTimeBy(1000 * 60 * 60 + 1)
+        advanceTimeToExpireCache()
         assertEquals(null, cache.get())
+    }
+
+    private fun advanceTimeToExpireCache() {
+        nowProvider.advanceTimeBy(cacheExpiryTimeMillis + 1)
     }
 
 }

@@ -11,11 +11,6 @@ import javax.inject.Singleton
 class RemotePostsRepository @Inject constructor(private val postsService: PostsService, private val cache: RemotePostsCache) : PostsRepository {
 
     override suspend fun getPosts(): List<Post> = coroutineScope {
-        val cachedPosts = cache.get()
-        if (cachedPosts != null) {
-            return@coroutineScope cachedPosts
-        }
-
         val usersAsync = async { postsService.getUsers() }
         val postsAsync = async { postsService.getPosts() }
 
@@ -32,5 +27,9 @@ class RemotePostsRepository @Inject constructor(private val postsService: PostsS
     }
 
     override suspend fun getPost(id: Int): Post? =
-        getPosts().find { it.id == id }
+        cache.get()
+            ?.find { it.id == id }
+            ?: getPosts()
+                .find { it.id == id }
+
 }

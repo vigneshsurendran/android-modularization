@@ -2,19 +2,19 @@ package com.azabost.quest.posts.di
 
 import com.azabost.quest.posts.model.PostsRepository
 import com.azabost.quest.posts.remote.PostsService
+import com.azabost.quest.posts.remote.RemotePostsCache
 import com.azabost.quest.posts.remote.RemotePostsRepository
+import com.azabost.quest.time.NowProvider
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Converter
 import retrofit2.Retrofit
-import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import javax.inject.Singleton
+import kotlin.time.Duration.Companion.hours
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -33,5 +33,13 @@ interface PostsModule {
                 .addConverterFactory(converterFactory)
                 .build()
                 .create(PostsService::class.java)
+
+        @Provides
+        @Singleton
+        fun remotePostsCache(nowProvider: NowProvider) =
+            RemotePostsCache(
+                cacheExpiryTimeMillis = 1.hours.inWholeMilliseconds,
+                nowProvider = nowProvider,
+            )
     }
 }
