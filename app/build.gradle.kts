@@ -11,12 +11,12 @@ plugins {
 
 android {
     namespace = "com.azabost.quest"
-    compileSdk = 35
+    compileSdk = Config.compileSdk
 
     defaultConfig {
         applicationId = "com.azabost.modularization"
-        minSdk = 28
-        targetSdk = 35
+        minSdk = Config.minSdk
+        targetSdk = Config.targetSdk
         versionCode = 1
         versionName = "1.0"
 
