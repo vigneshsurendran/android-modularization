@@ -11,7 +11,7 @@ import javax.inject.Singleton
 class SentryLogger(override val name: String) : Logger {
 
     @Singleton
-    class Factory @Inject constructor(): Logger.Factory {
+    class Factory @Inject constructor() : Logger.Factory {
         override fun create(name: String): Logger = SentryLogger(name)
     }
 

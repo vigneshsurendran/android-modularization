@@ -23,9 +23,9 @@ class PostsViewModel @Inject constructor(
     val uiState: StateFlow<UiState> = _uiState
 
     sealed class UiState {
-        object Loading: UiState()
-        data class Success(val posts: List<Post>): UiState()
-        object Error: UiState()
+        object Loading : UiState()
+        data class Success(val posts: List<Post>) : UiState()
+        object Error : UiState()
     }
 
     fun getPosts() {

@@ -5,7 +5,7 @@ import javax.inject.Inject
 
 class ShareSenderImpl @Inject constructor(
     private val sharingActivityHolder: SharingActivityHolder,
-): ShareSender {
+) : ShareSender {
 
     override fun share(text: String): ShareResult {
         val activity = sharingActivityHolder.getSharingActivity()

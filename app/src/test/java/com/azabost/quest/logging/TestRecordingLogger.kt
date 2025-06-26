@@ -1,6 +1,6 @@
 package com.azabost.quest.logging
 
-class TestRecordingLoggerFactory : Logger.Factory  {
+class TestRecordingLoggerFactory : Logger.Factory {
     private val loggers = mutableMapOf<String, TestRecordingLogger>()
 
     val debugMessages = mutableListOf<LogRecord>()
@@ -11,7 +11,7 @@ class TestRecordingLoggerFactory : Logger.Factory  {
     override fun create(name: String): Logger =
         loggers.getOrPut(name, { TestRecordingLogger(name) })
 
-    inner class TestRecordingLogger(override val name: String): Logger {
+    inner class TestRecordingLogger(override val name: String) : Logger {
         @Synchronized
         override fun debug(message: String) {
             debugMessages.add(LogRecord(name, message, null))

@@ -1,6 +1,5 @@
 package com.azabost.quest.logging
 
-import com.azabost.quest.analytics.AnalyticsEvent
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

@@ -1,8 +1,6 @@
 package com.azabost.quest.logging
 
 import android.util.Log
-import com.azabost.quest.BuildConfig
-import com.azabost.quest.analytics.AnalyticsEvent
 import com.azabost.quest.config.Config
 import dagger.Binds
 import dagger.Module
@@ -10,7 +8,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
 import javax.inject.Inject
-import javax.inject.Singleton
 
 class LogcatLogger(
     override val name: String,
@@ -19,7 +16,7 @@ class LogcatLogger(
 
     class Factory @Inject constructor(
         private val config: Config
-    ): Logger.Factory {
+    ) : Logger.Factory {
         override fun create(name: String): Logger = LogcatLogger(name, config)
     }
 
