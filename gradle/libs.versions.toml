@@ -49,6 +49,7 @@ retrofit-converter-kotlinxSerialization = { group = "com.squareup.retrofit2", na
 
 [plugins]
 android-application = { id = "com.android.application" }
+android-library = { id = "com.android.library" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm" }
 kotlin-android = { id = "org.jetbrains.kotlin.android" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
