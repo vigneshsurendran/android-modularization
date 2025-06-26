@@ -1,4 +1,4 @@
-package com.azabost.quest.ui.theme
+package com.azabost.quest.theme
 
 import androidx.compose.ui.graphics.Color
 
