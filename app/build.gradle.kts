@@ -58,11 +58,15 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
+    // coroutines
     implementation(libs.kotlinx.coroutines.android)
 
     // Hilt
+    implementation(libs.hilt.core)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+    implementation(libs.javax.inject)
 
     // serialization
     implementation(libs.kotlinx.serialization.core)
