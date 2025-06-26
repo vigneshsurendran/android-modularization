@@ -21,5 +21,5 @@ dependencyResolutionManagement {
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-rootProject.name = "Quest1"
+rootProject.name = "quest"
 include(":app")
