@@ -49,6 +49,25 @@ kotlin {
 }
 
 dependencies {
+    implementation(projects.analytics.api)
+    implementation(projects.config.api)
+    implementation(projects.logger.api)
+    implementation(projects.logger.impl)
+    implementation(projects.lifecycle.api)
+    implementation(projects.serialization)
+    implementation(projects.network)
+    implementation(projects.post.ui)
+    implementation(projects.post.data)
+    implementation(projects.post.domain)
+    implementation(projects.share.impl)
+    implementation(projects.share.api)
+    implementation(projects.theme)
+    implementation(projects.time.impl)
+    implementation(projects.time.api)
+
+
+
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
