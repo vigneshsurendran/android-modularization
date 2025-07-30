@@ -1,10 +1,10 @@
-package com.quest.post.ui.di
+package com.quest.post.data.remote.di
 
-import com.azabost.quest.posts.model.PostsRepository
-import com.azabost.quest.posts.remote.PostsService
-import com.azabost.quest.posts.remote.RemotePostsCache
-import com.azabost.quest.posts.remote.RemotePostsRepository
-import com.azabost.quest.time.NowProvider
+import com.quest.post.data.remote.PostsService
+import com.quest.post.data.remote.RemotePostsCache
+import com.quest.post.data.remote.RemotePostsRepository
+import com.quest.post.domain.PostsRepository
+import com.quest.time.api.NowProvider
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -20,13 +20,15 @@ import kotlin.time.Duration.Companion.hours
 @InstallIn(SingletonComponent::class)
 interface PostsModule {
 
+
     @Binds
     fun postsRepository(repository: RemotePostsRepository): PostsRepository
+
 
     companion object {
         @Provides
         @Singleton
-        fun postsService(okHttpClient: OkHttpClient, converterFactory: Converter.Factory): PostsService =
+        fun postsService(okHttpClient: OkHttpClient, converterFactory: Converter.Factory ): PostsService =
             Retrofit.Builder()
                 .client(okHttpClient)
                 .baseUrl("https://jsonplaceholder.typicode.com/")

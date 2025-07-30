@@ -12,8 +12,8 @@ import dagger.hilt.components.SingletonComponent
 interface LifecycleModule {
 
     @Binds
-    fun activityLifecycleCallbacks(activityLifecycleCallbacks: Application.ActivityLifecycleCallbacks): Application.ActivityLifecycleCallbacks
+    fun activityLifecycleCallbacks(activityLifecycleCallbacks: ActivityLifecycleCallbacks): Application.ActivityLifecycleCallbacks
 
     @Binds
-    fun sharingActivityHolder(activityLifecycleCallbacks: Application.ActivityLifecycleCallbacks): SharingActivityHolder
+    fun sharingActivityHolder(activityLifecycleCallbacks: ActivityLifecycleCallbacks): SharingActivityHolder
 }

@@ -47,6 +47,7 @@ dependencies {
     implementation(projects.logger.api)
     implementation(projects.share.api)
     implementation(projects.analytics.api)
+    implementation(projects.serialization)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
@@ -60,6 +61,12 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.javax.inject)
+
+
+
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+
 
 
 }

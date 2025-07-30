@@ -3,6 +3,8 @@ import com.azabost.quest.build.Config
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -38,6 +40,19 @@ dependencies {
     implementation(projects.logger.api)
     implementation(projects.config.api)
     implementation(projects.analytics.api)
-    implementation(libs.javax.inject)
+
+    
     implementation(libs.hilt.core)
+    implementation(libs.hilt.android)
+    implementation(libs.javax.inject)
+    ksp(libs.hilt.compiler)
+
+
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.kotlinxSerialization)
+
+
 }

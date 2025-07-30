@@ -39,6 +39,9 @@ class Analytics @Inject constructor(
         }
 }
 
+fun Logger.event(analyticsEvent: AnalyticsEvent) = info("event: ${analyticsEvent.key}")
+
+
 private object PseudoFirebaseAnalytics {
     fun logEvent(name: String, params: Bundle? = null) {
         // only pretending to be the real Firebase Analytics

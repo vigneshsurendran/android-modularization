@@ -24,11 +24,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.azabost.quest.analytics.Analytics
-import com.azabost.quest.analytics.AnalyticsEvent
-import com.azabost.quest.posts.model.Post
-import com.azabost.quest.posts.ui.details.PostDetailsActivity
-import com.azabost.quest.theme.QuestTheme
+import com.devgun.theme.QuestTheme
+import com.quest.analytics.api.Analytics
+import com.quest.analytics.api.AnalyticsEvent
+import com.quest.post.domain.Post
+import com.quest.post.ui.details.PostDetailsActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

@@ -16,3 +16,4 @@ interface Logger {
 
 fun Logger.Factory.create(kClass: KClass<*>): Logger = create(kClass.java.simpleName)
 
+

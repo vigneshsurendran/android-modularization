@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.quest.analytics.api.Analytics
 import com.quest.analytics.api.AnalyticsEvent
+import com.quest.analytics.api.event
 import com.quest.logger.api.Logger
 import com.quest.logger.api.create
 import com.quest.post.domain.Post
